@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { CustomerList, CustomerDetails as CustomerDetailsComponent } from './components'; // Renamed CustomerDetails
+import { CustomerList, CustomerDetails } from './components';
 import { fetchCustomers, fetchCustomerDetails } from './api';
-
-interface CustomerDetailsInfo {
-  name: string;
-  title: string;
-  address: string;
-  photos: string[];
-}
 
 const App: React.FC = () => {
   const [customers, setCustomers] = useState<any[]>([]);
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
-  const [customerDetails, setCustomerDetails] = useState<CustomerDetailsInfo | null>(null); // Renamed interface
+  const [customerDetails, setCustomerDetails] = useState<any | null>(null);
 
   useEffect(() => {
     fetchCustomers().then(data => setCustomers(data));
@@ -32,14 +25,10 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="app">
-      <Routes>
-  <Route path="/" element={<CustomerList
-              customers={customers}
-              onSelectCustomer={handleSelectCustomer}
-              selectedCustomerId={selectedCustomerId}
-            />} />
-  <Route path="/details" element={<CustomerDetailsComponent details={customerDetails ?? { name: '', title: '', address: '', photos: [] }} />} />
-</Routes>
+        <Routes>
+          <Route path="/" element={<CustomerList customers={customers} onSelectCustomer={handleSelectCustomer} selectedCustomerId={selectedCustomerId} />} />
+          <Route path="/details" element={<CustomerDetails details={customerDetails} />} />
+        </Routes>
       </div>
     </Router>
   );
